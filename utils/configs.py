@@ -11,10 +11,12 @@ fftoday = "https://fftoday.com"
 link = f"{fftoday}/stats/playerstats.php?Season=2022&GameWeek=&PosID="
 link_suffix = "&LeagueID=17"
 
+historical_data_url = 'https://raw.githubusercontent.com/voynow/ESPN-fantasy-football-2/main/data/structured.json'
 
-links_loc = "2022_data/player_links.json"
-raw_loc = '2022_data/raw.json'
-structured_loc = '2022_data/structured.json'
+links_loc = 'data/player_links.json'
+raw_loc = 'data/raw.json'
+structured_loc = 'data/structured.json'
+master_loc = 'data/master.json'
 
 table_names = [
     'header',
