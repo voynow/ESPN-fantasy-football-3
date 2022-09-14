@@ -112,7 +112,8 @@ def get_raw():
         json.dump(data_collection, f, indent=4)
 
 
-def extract():
+def extract(create_links=True):
     
-    get_links()
+    if create_links:
+        get_links()
     get_raw()

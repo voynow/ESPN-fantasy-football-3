@@ -46,6 +46,8 @@ def group(data):
                 string_key = string.replace(" ", "_").lower()
                 player_dict[string_key] = row
     
+    # print(configs.table_names)
+    # print(player_dict.keys())
     return player_dict
 
 

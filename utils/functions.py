@@ -60,41 +60,6 @@ def header_fn(data):
     data['header'] = header_dict_collection
     return data
 
-def season_stats_fn(data):
-    """
-    Extract data pertaining to players season level stats
-    """
-    season_stats_raw = data['season_stats']
-    pos = data['header']['pos']
-
-    # edge case for mid-season trades
-    season_stats_raw = [item.replace(" | ", "_") for item in season_stats_raw]
-
-    # Collect numeric data
-    season_stats = []
-    while season_stats_raw[-1].split(" ")[0].isnumeric():
-        season_stats.append(season_stats_raw.pop())
-    season_stats.reverse()
-
-    # edit projected row name
-    season_stats[-1] = season_stats[-1].replace("2022 (Projected)", "2022(Projected)")
-
-    # split data within each row
-    for i, row in enumerate(season_stats):
-        season_stats[i] = [item for item in row.split(" ") if item]
-
-    # edit projected row to match columns
-    season_stats[-1] = season_stats[-1][:2] + [None] + season_stats[-1][2:]
-
-    # collect columns
-    prefix = configs.season_stats['prefix_cols']
-    suffix = configs.season_stats['suffix_cols']
-    columns = prefix + configs.col_names[pos] + suffix
-
-    data['season_stats'] = stats_to_json(season_stats, columns)
-    return data
-
-
 def gamelog_stats_fn(data, table_name):
     """
     Extract data pertaining to players game level stats
@@ -116,22 +81,8 @@ def gamelog_stats_fn(data, table_name):
     return data
 
 
-def gamelog_stats_2021_fn(data): 
-    """
-    Extract data pertaining to players 2021 game level stats
-    """
-    return gamelog_stats_fn(data, '2021_gamelog_stats')
-
-
-def gamelog_stats_2020_fn(data): 
-    """
-    Extract data pertaining to players 2020 game level stats
-    """
-    return gamelog_stats_fn(data, '2020_gamelog_stats')
-
-
-def gamelog_stats_2019_fn(data): 
+def gamelog_stats_2022_fn(data): 
     """
     Extract data pertaining to players 2019 game level stats
     """
-    return gamelog_stats_fn(data, '2019_gamelog_stats')
+    return gamelog_stats_fn(data, '2022_gamelog_stats')

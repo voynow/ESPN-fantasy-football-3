@@ -3,14 +3,11 @@ from utils import functions
 
 function_map = {
     'header': functions.header_fn,
-    'season_stats': functions.season_stats_fn,
-    '2021_gamelog_stats': functions.gamelog_stats_2021_fn,
-    '2020_gamelog_stats': functions.gamelog_stats_2020_fn,
-    '2019_gamelog_stats': functions.gamelog_stats_2019_fn,
+    '2022_gamelog_stats': functions.gamelog_stats_2022_fn,
 }
 
 fftoday = "https://fftoday.com"
-link = f"{fftoday}/stats/playerstats.php?Season=2021&GameWeek=&PosID="
+link = f"{fftoday}/stats/playerstats.php?Season=2022&GameWeek=&PosID="
 link_suffix = "&LeagueID=17"
 
 links_loc="data/player_links.json"
@@ -19,13 +16,10 @@ structured_loc = 'data/structured.json'
 
 table_names = [
     'header',
-    'Season Stats',
-    '2021 Gamelog Stats', 
-    '2020 Gamelog Stats', 
-    '2019 Gamelog Stats', 
+    '2022 Gamelog Stats', 
 ]
 
-    
+
 season_stats = {
     'prefix_cols': [        
         'season', 
