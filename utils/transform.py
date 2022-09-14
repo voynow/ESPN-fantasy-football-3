@@ -37,7 +37,7 @@ def group(data):
     header group accessed by index (0th and 2nd row of raw data)
     other groups accessed by string search
     """
-    table_names = list(configs.function_map.keys())
+    table_names = configs.table_names
     
     player_dict = {}
     player_dict[table_names[0]] = data[0] + data[2]
