@@ -16,6 +16,10 @@ links_loc = "2022_data/player_links.json"
 raw_loc = '2022_data/raw.json'
 structured_loc = '2022_data/structured.json'
 
+table_names = [
+    'header',
+    '2022 Gamelog Stats', 
+]
 
 season_stats = {
     'prefix_cols': [        
