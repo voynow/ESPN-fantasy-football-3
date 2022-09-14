@@ -6,18 +6,15 @@ function_map = {
     '2022_gamelog_stats': functions.gamelog_stats_2022_fn,
 }
 
+
 fftoday = "https://fftoday.com"
 link = f"{fftoday}/stats/playerstats.php?Season=2022&GameWeek=&PosID="
 link_suffix = "&LeagueID=17"
 
-links_loc="data/player_links.json"
-raw_loc = 'data/raw.json'
-structured_loc = 'data/structured.json'
 
-table_names = [
-    'header',
-    '2022 Gamelog Stats', 
-]
+links_loc = "2022_data/player_links.json"
+raw_loc = '2022_data/raw.json'
+structured_loc = '2022_data/structured.json'
 
 
 season_stats = {

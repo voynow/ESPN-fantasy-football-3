@@ -37,17 +37,17 @@ def group(data):
     header group accessed by index (0th and 2nd row of raw data)
     other groups accessed by string search
     """
+    table_names = list(configs.function_map.keys())
+    
     player_dict = {}
-    player_dict[configs.table_names[0]] = data[0] + data[2]
+    player_dict[table_names[0]] = data[0] + data[2]
 
     for row in data:
-        for string in configs.table_names:
+        for string in table_names:
             if row[0] == string:
                 string_key = string.replace(" ", "_").lower()
                 player_dict[string_key] = row
     
-    # print(configs.table_names)
-    # print(player_dict.keys())
     return player_dict
 
 
