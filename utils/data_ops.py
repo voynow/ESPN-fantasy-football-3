@@ -4,13 +4,10 @@ import pandas as pd
 from utils import configs
 
 
-def load_master():
-
-    return json.load(open(configs.master_loc, 'rb'))
-
-
 def normalize(json_data):
-
+    """
+    Update data structure where data tables are brought to top level 
+    """
     for player, obj in json_data.items():
 
         # bring header attributes to top level
@@ -28,3 +25,11 @@ def normalize(json_data):
         del json_data[player]['data']
 
     return json_data
+
+
+def load():
+    """
+    Load master dataset with tables names accessible by dictionary key
+    """
+    f_open = open(configs.master_loc, 'rb')
+    return normalize(json.load(f_open))
