@@ -33,3 +33,29 @@ def load():
     """
     f_open = open(configs.master_loc, 'rb')
     return normalize(json.load(f_open))
+
+
+def join_players(json_data):
+
+    dfs = {}
+
+    for player, data in json_data.items():
+        pos = data['pos']
+
+        for key in data:
+            year = key.split("_")[0]
+
+            if year.isnumeric() and len(year) == 4:
+                df = pd.DataFrame(data[key])
+                df['player'] = player
+                df['year'] = year
+
+                if pos in dfs:
+                    dfs[pos].append(df)
+                else:
+                    dfs[pos] = [df]
+
+    for key in dfs:
+        dfs[key] = pd.concat(dfs[key])
+
+    return dfs
