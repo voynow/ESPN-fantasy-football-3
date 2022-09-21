@@ -28,36 +28,29 @@ def header_fn(data):
     """
     Extract misc player information not included in season/gamlog stats
     """
-    header_raw = data['header'][2:]
+    header = {}
+    raw_header = data['header']
 
-    # get position and team, if no team exists team = ""
-    position_team = header_raw.pop(0).split(", ")
-    position_team.append("")
-    (pos, team) = position_team[:2]
+    header['pos'], header['team'] = raw_header[2].split(", ")
+    header['pos'] = header['pos'].lower()
+    header['team'] = header['team'].lower()
 
-    # format string for key value structure
-    draft_class_replace_tuples = (" ", "_"), (":_",": "), ("(", ""), (")", "")
-    for t in draft_class_replace_tuples:
-        header_raw[0] = header_raw[0].replace(*t)
-    header_raw.append(header_raw.pop().replace("  ", " "))
+    for item in raw_header[3:]:
+        if ":" in item:
+            split_item = item.split(": ")
+            key = split_item[0]
+            if key == "College":
+                header[key.lower()] = split_item[1]
+            if key == "Draft":
+                header[key.lower()] = split_item[1].replace(" ", "_").replace("(", "").replace(")", "")
+            if key in ["Ht", "DOB", "Age"]:
+                item = item.replace(": ", ":").replace("  ", " ").split(" ")
+                for subitem in item:
+                    if ":" in subitem:
+                        key, val = subitem.split(":")
+                        header[key.lower()] = val
 
-    # add pos and team in key value structure
-    header_raw.append(f'pos: {pos.lower()}')
-    header_raw.append(f'team: {team.lower()}')
-
-    # seperate keys from values
-    header_key_values = [item.replace(": ", " ").split(" ") for item in header_raw]
-
-    # populate dict with keys and values
-    header_dict_collection = {}
-    for row in header_key_values:
-        for i, item in enumerate(row):
-            if i % 2:
-                header_dict_collection[key] = item.lower()
-            else:
-                key = item.lower()
-
-    data['header'] = header_dict_collection
+    data['header'] = header
     return data
 
 def gamelog_stats_fn(data, table_name):

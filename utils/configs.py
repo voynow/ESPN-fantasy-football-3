@@ -65,7 +65,7 @@ col_names = {
         'rushing_td',
     ],
 
-    'running': [
+    'running back': [
         'rushing_att',
         'rushing_yard',
         'rushing_avg',
@@ -77,7 +77,7 @@ col_names = {
         'receiving_td',
     ],
 
-    'wide': [
+    'wide receiver': [
         'receiving_target',
         'receiving_rec',
         'receiving_yard',
@@ -89,7 +89,7 @@ col_names = {
         'rushing_td',
     ],
 
-    'tight': [
+    'tight end': [
         'receiving_target',
         'receiving_rec',
         'receiving_yard',
