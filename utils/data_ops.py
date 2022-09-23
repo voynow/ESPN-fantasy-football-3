@@ -48,7 +48,7 @@ def join_players(json_data):
             if year.isnumeric() and len(year) == 4:
                 df = pd.DataFrame(data[key])
                 df['player'] = player
-                df['year'] = year
+                df['year'] = int(year)
 
                 if pos in dfs:
                     dfs[pos].append(df)
