@@ -1,6 +1,6 @@
 import json
-from os import stat
-from utils import configs
+from utils import extract, configs
+import urllib
 
 
 def split_on_newline(raw_data):
@@ -51,21 +51,16 @@ def group(data):
     return player_dict
 
 
-def transform():
-    """
-    Pipeline for facilitating data tranformation of raw text/json data into 
-    a structured josn format, where table-like structures begin to emerge
-    """
-    function_map = configs.function_map
-    raw_loc = configs.raw_loc
+def transformation_pipeline():
 
-    master_raw_data, raw_data = prep_raw_data(raw_loc)
-    
+    # raw data preprocessing
+    master_raw_data, raw_data = prep_raw_data(configs.raw_loc)
+
     # transformations
     for k, data in raw_data.items():
         grouped_data = group(data)
         for group_name in grouped_data:
-            transformation = function_map[group_name]
+            transformation = configs.function_map[group_name]
             grouped_data = transformation(grouped_data)
             raw_data[k] = grouped_data
 
@@ -73,7 +68,38 @@ def transform():
     for k, data in raw_data.items():
         master_raw_data[k]['data'] = data
 
-    # save data
+    return master_raw_data
+
+
+def join_data():
+    """
+    Load previous years data and join with current data
+    save as json in data folder
+    """
+    master_data = json.loads(urllib.request.urlopen(configs.historical_data_url).read())
+    live_data = json.load(open(configs.structured_loc, 'rb'))
+
+    for player in live_data:
+        if player in master_data:
+            master_data[player]['data']['2022_gamelog_stats'] = live_data[player]['data']['2022_gamelog_stats']
+        else:
+            master_data[player] = live_data[player]
+
+    return master_data
+
+
+def transform():
+    """
+    Pipeline for facilitating data tranformation of raw text/json data into 
+    a structured josn format, where table-like structures begin to emerge
+    """
+
+    transformed_data = transformation_pipeline()
     with open(configs.structured_loc, "w") as f:
-        json.dump(master_raw_data, f, indent=4)
+        json.dump(transformed_data, f, indent=4)
+
+    joined_data = join_data()
+    with open(configs.master_loc, "w") as f:
+        json.dump(joined_data, f, indent=4)
         
+    
