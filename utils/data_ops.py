@@ -61,31 +61,59 @@ def join_players(json_data):
     return dfs
 
 
+def get_schedule(week_num):
+    """
+    Transforming schedule copied from https://www.fftoday.com/nfl/schedule.php
+    """
+    data_path = 'data/2022_schedule.csv'
+
+    schedule = []
+    for row in open(data_path, 'r').readlines():
+
+        remove_strings = "\n", " â¹", " *"
+        for string in remove_strings:
+            row = row.replace(string, "")
+        row = row.split(",")
+
+        if 'Week' in row[0]:
+            schedule.append([])
+        else:
+            schedule[-1].append(row)
+
+    for i, week in enumerate(schedule):
+        if i == week_num - 1:
+            df = pd.DataFrame(week[1:]).iloc[:, :4]
+            df.columns = week[0]
+            for col in ["Away Team", "Home Team"]:
+                df[col] = df[col].apply(lambda x: x.lower() if x else x)
+                df[col] = df[col].apply(lambda x: configs.team_abbreviation_map[x] if x else x)
+            return df
+
 def get_opponent_strength(dfs, season=2022):
     """
     Group data by position & opponent and exctact statistics for points scored
     The resulting dataframe can identify strength of an opponen for all positions
     """    
     opp_strength_all_positions = {}
-    opp_strength_cols = ["opp", "fpts", "std", "var", "min", "max"]
+    opp_strength_cols = ["opp", "fpts/g", "std", "var", "min", "max"]
 
     for pos in dfs:
         df = dfs[pos]
-        df_2022 = df[df['year'] == season]
-        df_2022['opp'] =  df_2022['opp'].apply(lambda x: x.replace("@", ""))
+        df_year = df[df['year'] == season]
+        df_year['opp'] =  df_year['opp'].apply(lambda x: x.replace("@", ""))
 
         opp_strength = {col: [] for col in opp_strength_cols}
 
-        for opp, group in df_2022.groupby('opp'):
+        for opp, group in df_year.groupby('opp'):
             fpts = group['fpts']
 
             opp_strength['opp'].append(opp)
-            opp_strength['fpts'].append(fpts.sum())
+            opp_strength['fpts/g'].append(fpts.mean().round(3))
             opp_strength['std'].append(fpts.std().round(3))
             opp_strength['var'].append(fpts.var().round(3))
             opp_strength['min'].append(fpts.min())
             opp_strength['max'].append(fpts.max())
 
-        opp_strength_all_positions[pos] = pd.DataFrame(opp_strength).sort_values(by='fpts', ascending=False)
+        opp_strength_all_positions[pos] = pd.DataFrame(opp_strength).sort_values(by='fpts/g', ascending=False).reset_index()
 
     return opp_strength_all_positions

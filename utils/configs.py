@@ -106,6 +106,7 @@ col_names = {
     ]
 }
 
+
 float_cols = [
     'games_played',
     'fpts',
@@ -132,3 +133,39 @@ float_cols = [
     'epm', 
     'epa'
 ]
+
+
+team_abbreviation_map = {
+    'buffalo bills': "BUF",
+    'tampa bay buccaneers': "TB",
+    'los angeles chargers': "LAC",
+    'kansas city chiefs': "KC",
+    'los angeles rams': "LAR",
+    'green bay packers': "GB",
+    'cincinnati bengals': "CIN",
+    'dallas cowboys': "DAL",
+    'philadelphia eagles': "PHI",
+    'arizona cardinals': "ARI",
+    'minnesota vikings': "MIN",
+    'tennessee titans': "TEN",
+    'las vegas raiders': "LV",
+    'washington commanders': "WAS",
+    'baltimore ravens': "BAL",
+    'denver broncos': "DEN",
+    'san francisco 49ers': "SF",
+    'new england patriots': "NE",
+    'indianapolis colts': "IND",
+    'jacksonville jaguars': "JAC",
+    'miami dolphins': "MIA",
+    'detroit lions': "DET",
+    'carolina panthers': "CAR",
+    'new york giants': "NYG",
+    'houston texans': "HOU",
+    'new york jets': "NYJ",
+    'chicago bears': "CHI",
+    'new orleans saints': "NO",
+    'cleveland browns': "CLE",
+    'seattle seahawks': "SEA",
+    'pittsburgh steelers': "PIT",
+    'atlanta falcons': "ATL",
+}
