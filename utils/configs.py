@@ -11,17 +11,20 @@ fftoday = "https://fftoday.com"
 link = f"{fftoday}/stats/playerstats.php?Season=2022&GameWeek=&PosID="
 link_suffix = "&LeagueID=17"
 
-historical_data_url = 'https://raw.githubusercontent.com/voynow/ESPN-fantasy-football-2/main/data/structured.json'
 
+historical_data_url = 'https://raw.githubusercontent.com/voynow/ESPN-fantasy-football-2/main/data/structured.json'
 links_loc = 'data/player_links.json'
 raw_loc = 'data/raw.json'
 structured_loc = 'data/structured.json'
 master_loc = 'data/master.json'
+schedule_2022_loc = 'data/2022_schedule.csv'
+
 
 table_names = [
     'header',
     '2022 Gamelog Stats', 
 ]
+
 
 season_stats = {
     'prefix_cols': [        
@@ -169,3 +172,20 @@ team_abbreviation_map = {
     'pittsburgh steelers': "PIT",
     'atlanta falcons': "ATL",
 }
+
+
+opp_strength_cols = [
+    "opp", 
+    "fpts/g", 
+    "std", 
+    "var", 
+    "min", 
+    "max"
+]
+
+
+main_slate_times = [
+    "1:00 PM",
+    "4:05 PM",
+    "4:25 PM",
+]
