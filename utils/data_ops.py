@@ -36,9 +36,10 @@ def load():
 
 
 def join_players(json_data):
-
+    """
+    Join game statistics partitioned by position
+    """
     dfs = {}
-
     for player, data in json_data.items():
         pos = data['pos']
 
@@ -89,7 +90,7 @@ def get_schedule(week_num):
                 df[col] = df[col].apply(lambda x: configs.team_abbreviation_map[x] if x else x)
             return df
 
-def get_opponent_strength(dfs, season=2022):
+def get_opponent_strength(dfs, season=2022, weeks=None):
     """
     Group data by position & opponent and exctact statistics for points scored
     The resulting dataframe can identify strength of an opponen for all positions
@@ -100,12 +101,15 @@ def get_opponent_strength(dfs, season=2022):
     for pos in dfs:
         df = dfs[pos]
         df_year = df[df['year'] == season]
+        if weeks:
+            df_year = df_year[df_year['week'].apply(lambda x: int(x) in weeks)]
         df_year['opp'] =  df_year['opp'].apply(lambda x: x.replace("@", ""))
 
         opp_strength = {col: [] for col in opp_strength_cols}
 
         for opp, group in df_year.groupby('opp'):
-            fpts = group['fpts']
+
+            fpts = group.groupby('week').sum()['fpts']
 
             opp_strength['opp'].append(opp)
             opp_strength['fpts/g'].append(fpts.mean().round(3))
