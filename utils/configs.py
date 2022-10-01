@@ -1,12 +1,6 @@
 from utils import functions
 
 
-function_map = {
-    'header': functions.header_fn,
-    '2022_gamelog_stats': functions.gamelog_stats_2022_fn,
-}
-
-
 fftoday = "https://fftoday.com"
 link = f"{fftoday}/stats/playerstats.php?Season=2022&GameWeek=&PosID="
 link_suffix = "&LeagueID=17"
@@ -18,6 +12,15 @@ raw_loc = 'data/raw.json'
 structured_loc = 'data/structured.json'
 master_loc = 'data/master.json'
 schedule_2022_loc = 'data/2022_schedule.csv'
+
+weeks_played = 3
+num_weeks = 18
+
+
+function_map = {
+    'header': functions.header_fn,
+    '2022_gamelog_stats': functions.gamelog_stats_2022_fn,
+}
 
 
 table_names = [
@@ -180,7 +183,8 @@ opp_strength_cols = [
     "std", 
     "var", 
     "min", 
-    "max"
+    "max",
+    "num_weeks"
 ]
 
 
