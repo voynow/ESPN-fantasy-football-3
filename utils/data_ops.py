@@ -238,3 +238,32 @@ def get_rest_of_season_opponent_strength(dfs):
         rest_of_season_data[key] = pd.concat(data_collection).reset_index()
 
     return rest_of_season_data
+
+
+def get_strength_of_schedule(dfs):
+    """
+    Quantify strength of schedule for the rest of the season
+    """
+    opponent_strength = get_rest_of_season_opponent_strength(dfs)
+
+    strength_of_schedule = {}
+    for player, schedule in opponent_strength.items():
+        strength_of_schedule[player] = schedule['fpts/g'].mean()
+
+    for key, df in dfs.items():
+        df = df.where(df["year"] == 2022)\
+            .groupby('player').mean()\
+            .sort_values(by="fpts", ascending=False)\
+            .rename({"fpts": "fpts/g"}, axis=1)
+
+        strength = []
+        for player in df.index:
+            if player in strength_of_schedule:
+                strength.append(strength_of_schedule[player])
+            else:
+                strength.append(None)
+        df['strength_of_schedule'] = strength
+
+        dfs[key] = df[['fpts/g', 'strength_of_schedule']]
+
+    return dfs
