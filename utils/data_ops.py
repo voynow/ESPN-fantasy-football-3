@@ -212,14 +212,14 @@ def get_rest_of_season_schedule_map():
     return schedule_map
 
 
-def get_rest_of_season_opponent_strength(dfs):
+def get_strength_of_schedule(dfs):
 
     team_abbreviation_map = configs.team_abbreviation_map
     schedule_map = get_rest_of_season_schedule_map()
     opponent_strength = get_opponent_strength(dfs)
     json_data = load()
 
-    rest_of_season_data = {}
+    strength_of_schedule = {}
     for key, obj in json_data.items():
 
         team = obj['team']
@@ -235,35 +235,6 @@ def get_rest_of_season_opponent_strength(dfs):
         opponents = pos_opponent_strength['opp']
         for team in rest_of_season_opponents:
             data_collection.append(pos_opponent_strength[opponents == team])
-        rest_of_season_data[key] = pd.concat(data_collection).reset_index()
+        strength_of_schedule[key] = pd.concat(data_collection).reset_index()
 
-    return rest_of_season_data
-
-
-def get_strength_of_schedule(dfs):
-    """
-    Quantify strength of schedule for the rest of the season
-    """
-    opponent_strength = get_rest_of_season_opponent_strength(dfs)
-
-    strength_of_schedule = {}
-    for player, schedule in opponent_strength.items():
-        strength_of_schedule[player] = schedule['fpts/g'].mean()
-
-    for key, df in dfs.items():
-        df = df.where(df["year"] == 2022)\
-            .groupby('player').mean()\
-            .sort_values(by="fpts", ascending=False)\
-            .rename({"fpts": "fpts/g"}, axis=1)
-
-        strength = []
-        for player in df.index:
-            if player in strength_of_schedule:
-                strength.append(strength_of_schedule[player])
-            else:
-                strength.append(None)
-        df['strength_of_schedule'] = strength
-
-        dfs[key] = df[['fpts/g', 'strength_of_schedule']]
-
-    return dfs
+    return strength_of_schedule
