@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import numpy as np
 
 from utils import configs
 
@@ -62,6 +63,37 @@ def join_players(json_data):
         dfs[key] = pd.concat(dfs[key])
 
     return dfs
+
+
+def get_scoring_leaders(dfs, pos):
+    """
+    Return 2022 performance data given position
+    """
+    df = dfs[pos]
+
+    # group by player
+    df = df.where(df['year'] == 2022)\
+        .drop('year', axis=1)\
+        .groupby('player')
+
+    # access individual week point values
+    fpts = pd.DataFrame({player: group.fpts for player, group in df}).transpose()
+    fpts.columns = [f'week_{i}' for i in range(fpts.shape[1])]
+
+    # concat sum of grouped data, size of groups,individual week point values
+    df = pd.concat([df.sum(), df.size(), fpts], axis=1)\
+            .rename({0: "ngames"}, axis=1)\
+            .sort_values(by='fpts', ascending=False)
+
+    # take player from index and create col
+    df.insert(loc=0, column='player', value=df.index)
+    df.index = np.arange(len(df))
+
+    # create ppg features from ngames and fpts
+    df['ppg'] = (df['fpts'] / df['ngames']).round(1)
+    df = df.drop('ngames', axis=1)
+
+    return df
 
 
 def get_schedule():
